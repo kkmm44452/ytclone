@@ -27,7 +27,10 @@ export default function Navbar({
  useEffect(() => {
   const checkAuth = async () => {
     try {
-      const res = await fetch("/api/me", { cache: "no-store" });
+      const res = await fetch("/api/me", {
+  cache: "no-store",
+  credentials: "include", // 🔥 ensures cookie is sent
+});
       const data = await res.json();
       setIsLoggedIn(!!data.user);
     } catch {

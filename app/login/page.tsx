@@ -37,6 +37,7 @@ export default function LoginPage() {
       });
 
       router.push("/");
+      router.refresh(); // 🔥 VERY IMPORTANT
     } catch (err) {
       console.error(err);
       alert("Login failed ❌");

@@ -25,6 +25,7 @@ export async function POST(req: Request) {
     httpOnly: true,
     secure: true,
     path: "/",
+    sameSite: "lax", // ✅ add this
   });
 
   return new Response("OK");
