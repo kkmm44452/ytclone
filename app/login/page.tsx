@@ -29,7 +29,7 @@ export default function LoginPage() {
       const token = await userCred.user.getIdToken();
 
       // 🔥 Create secure session cookie
-      await fetch("/api/session", {
+      await fetch("api/user/create/session", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
