@@ -13,7 +13,7 @@ export default function Navbar({
   toggleSidebar: () => void;
 }) {
   const [openMenu, setOpenMenu] = useState(false);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+//const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // useEffect(() => {
@@ -23,12 +23,12 @@ export default function Navbar({
 
   //   return () => unsubscribe();
   // }, []);
-  useEffect(() => {
+  
+ useEffect(() => {
   const checkAuth = async () => {
     try {
-      const res = await fetch("/api/me");
+      const res = await fetch("/api/me", { cache: "no-store" });
       const data = await res.json();
-
       setIsLoggedIn(!!data.user);
     } catch {
       setIsLoggedIn(false);
@@ -36,7 +36,8 @@ export default function Navbar({
   };
 
   checkAuth();
-}, []);
+}, [router]);
+
  const handleLogout = async () => {
   try {
     await fetch("/api/logout", {
