@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// ---------------- USER ----------------
+model User {
+  id               String         @id @default(cuid())
+  firebaseUid      String         @unique
+  name             String?
+  email            String         @unique
+  image            String?
+  createdAt        DateTime       @default(now())
+  channel          Channel?
+  comments         Comment[]
+  receivedMessages Message[]      @relation("ReceivedMessages")
+  sentMessages     Message[]      @relation("SentMessages")
+  notifications    Notification[]
+  subscriptions    Subscription[]
+  videos           Video[]
+}
+
+/// ---------------- CHANNEL ----------------
+model Channel {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  avatar      String?
+  createdAt   DateTime       @default(now())
+  userId      String         @unique
+  user        User           @relation(fields: [userId], references: [id])
+  subscribers Subscription[]
+  videos      Video[]
+}
+
+/// ---------------- VIDEO ----------------
+model Video {
+  id          String    @id @default(cuid())
+  type        String
+  title       String
+  description String?
+  youtubeId   String?
+  hlsUrl      String?
+  thumbnail   String?
+  views       Int       @default(0)
+  likes       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  /// relations
+  userId      String?
+  channelId   String?
+  comments    Comment[]
+  channel     Channel?  @relation(fields: [channelId], references: [id])
+  user        User?     @relation(fields: [userId], references: [id])
+}
+
+/// ---------------- COMMENT ----------------
+model Comment {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+  videoId   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  video     Video    @relation(fields: [videoId], references: [id])
+}
+
+/// ---------------- SUBSCRIPTION ----------------
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String
+  channelId String
+  createdAt DateTime @default(now())
+  channel   Channel  @relation(fields: [channelId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, channelId])
+}
+
+/// ---------------- MESSAGE ----------------
+model Message {
+  id         String   @id @default(cuid())
+  text       String
+  senderId   String
+  receiverId String
+  createdAt  DateTime @default(now())
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+}
+
+/// ---------------- NOTIFICATION ----------------
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
