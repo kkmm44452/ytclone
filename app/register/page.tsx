@@ -112,7 +112,10 @@ export default function RegisterPage() {
     // 🔥 create user + channel in DB
     await setupUser();
 
-      router.push("/");
+     // router.push("/");
+
+     window.location.href = "/";
+
     } catch (err) {
       console.error(err);
       alert("Registration failed ❌");
