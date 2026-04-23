@@ -59,7 +59,7 @@ export default function Sidebar({ open }: SidebarProps) {
 
     setUser(null);
     router.push("/login");
-    router.refresh();
+    window.location.href = "/";
   };
   return (
     <div

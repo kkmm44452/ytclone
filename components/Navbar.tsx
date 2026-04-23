@@ -46,9 +46,9 @@ export default function Navbar({
     await fetch("/api/logout", {
       method: "POST",
     });
-setIsLoggedIn(false);
+    setIsLoggedIn(false);
     router.push("/login");
-    router.refresh(); // 🔥 refresh server state
+    window.location.href = "/";
   } catch (err) {
     console.error("Logout failed", err);
   }
