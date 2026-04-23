@@ -4,6 +4,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import HLSPlayer from "@/components/HLSPlayer";
+import { getVideos } from "@/app/actions/videofetch";
 
 const videos = [
   { id: "dQw4w9WgXcQ", type: "youtube", title: "Never Gonna Give You Up" },
@@ -25,13 +26,18 @@ const videos = [
   },
 ];
 
+const videosdb = await getVideos();
+
 export default function WatchPage() {
+
+  
+
   const { id } = useParams();
   const router = useRouter();
 
   const currentIndex = videos.findIndex((v) => v.id === id);
   const currentVideo = videos[currentIndex] || videos[0];
-
+  const dbVideos = videos.filter((v) => v.id|| v.title);
   const nextVideo = videos[currentIndex + 1];
 
   const [likes, setLikes] = useState(120);
@@ -189,9 +195,38 @@ export default function WatchPage() {
             </div>
           </div>
         ))}
+           <div className="w-[250px] space-y-3">
+        <h2 className="text-sm font-bold text-gray-600">
+          📦 Database Videos
+        </h2>
+
+        {dbVideos.map((v) => (
+          <div
+            key={v.id}
+            onClick={() => router.push(`/watch/${v.id}`)}
+            className="flex gap-2 cursor-pointer hover:bg-gray-100 p-2 rounded"
+          >
+            <img
+              src={
+                v.type === "youtube"
+                  ? `https://img.youtube.com/vi/${v.id}/0.jpg`
+                  : v.thumbnail
+              }
+              className="w-16 h-12 object-cover rounded"
+            />
+
+            <p className="text-xs font-medium line-clamp-2">
+              {v.title}
+            </p>
+          </div>
+        ))}
       </div>
+      </div>
+
+
     </div>
   );
+
   function SubscribeButton() {
     const [subscribed, setSubscribed] = useState(false);
 
