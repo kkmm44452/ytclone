@@ -37,7 +37,7 @@ export default function WatchPage() {
 
   const currentIndex = videos.findIndex((v) => v.id === id);
   const currentVideo = videos[currentIndex] || videos[0];
-  const dbVideos = videos.filter((v) => v.id|| v.title);
+  const dbVideos = videosdb.filter((v) => v.id|| v.title);
   const nextVideo = videos[currentIndex + 1];
 
   const [likes, setLikes] = useState(120);
@@ -210,7 +210,7 @@ export default function WatchPage() {
               src={
                 v.type === "youtube"
                   ? `https://img.youtube.com/vi/${v.id}/0.jpg`
-                  : v.thumbnail
+                  : ""
               }
               className="w-16 h-12 object-cover rounded"
             />
